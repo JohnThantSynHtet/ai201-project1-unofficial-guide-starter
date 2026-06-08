@@ -27,7 +27,11 @@ def ensure_project_environment():
         from sentence_transformers import SentenceTransformer  # noqa: F401
         return
     except ModuleNotFoundError:
-        if VENV_PYTHON.exists() and Path(sys.executable).resolve() != VENV_PYTHON.resolve():
+        if (
+            __name__ == "__main__"
+            and VENV_PYTHON.exists()
+            and Path(sys.executable).resolve() != VENV_PYTHON.resolve()
+        ):
             subprocess.run([str(VENV_PYTHON), str(Path(__file__).resolve())], check=True)
             sys.exit(0)
         raise
