@@ -149,18 +149,14 @@ Command-line query interface
 
 ## AI Tool Plan
 
-<!-- For each part of the pipeline below, describe:
-     - Which AI tool you plan to use (Claude, Copilot, ChatGPT, etc.)
-     - What you'll give it as input (which sections of this planning.md, which requirements)
-     - What you expect it to produce
-     - How you'll verify the output matches your spec
-
-     "I'll use AI to help me code" is not a plan.
-     "I'll give Claude my Chunking Strategy section and ask it to implement chunk_text()
-     with my specified chunk size and overlap" is a plan. -->
-
 **Milestone 3 — Ingestion and chunking:**
+
+I plan to use ChatGPT to help implement document ingestion and chunking. I will give ChatGPT my Documents section and Chunking Strategy section, then ask it to write Python functions that load `.txt` files from the `documents/` folder, clean extra whitespace, preserve source metadata, and split each document into 300-character chunks with 50-character overlap. I will verify the output by printing at least 5 sample chunks and checking that each chunk includes the correct source document name.
 
 **Milestone 4 — Embedding and retrieval:**
 
+I plan to use ChatGPT to help connect sentence-transformers and ChromaDB. I will give ChatGPT my Retrieval Approach section and ask it to create embeddings with `sentence-transformers/all-MiniLM-L6-v2`, store chunks in a local ChromaDB collection, and retrieve the top 3 chunks for a user query. I will verify the output by testing at least 3 queries and checking whether the returned chunks match the expected course or professor.
+
 **Milestone 5 — Generation and interface:**
+
+I plan to use ChatGPT to help build a simple command-line query interface and grounded generation prompt. I will give ChatGPT the project requirement that answers must use only retrieved context and include source attribution. Since Groq API access did not work for my account, I plan to use Ollama locally for the LLM if Groq remains unavailable. I will verify the output by testing in-scope questions, checking that sources appear in the answer, and testing one out-of-scope query to make sure the system refuses unsupported questions.
