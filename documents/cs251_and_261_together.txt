@@ -1,0 +1,15 @@
+Source: Reddit r/uichicago
+Title: Is CS 251 and CS 261 doable together?
+
+Student Discussion Summary:
+
+Students discussed taking CS 251 and CS 261 simultaneously.
+
+Common Feedback:
+- CS 251 requires extensive programming work.
+- CS 261 focuses more on concepts and theory.
+- Both courses require significant weekly study time.
+- Success depends on scheduling and discipline.
+
+Key Themes:
+High workload, balance, planning, study commitment.

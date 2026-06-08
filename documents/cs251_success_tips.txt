@@ -1,0 +1,15 @@
+Source: Reddit r/uichicago
+Title: How can I be successful in CS 251?
+
+Student Discussion Summary:
+
+Students shared advice for succeeding in CS 251.
+
+Common Feedback:
+- Practice C++ regularly.
+- Stay ahead on assignments.
+- Review lecture material frequently.
+- Seek help early when stuck.
+
+Key Themes:
+Consistent practice, preparation, discipline, persistence.
