@@ -6,6 +6,8 @@ This project is a small retrieval-augmented question answering system for studen
 
 This project uses local embeddings with `sentence-transformers/all-MiniLM-L6-v2` and local LLM generation with Ollama `llama3.1:8b`. To reproduce the full generation pipeline, install Ollama and run `ollama pull llama3.1:8b` before running `python query.py` or `python app.py`. Retrieval can still be tested without Groq or paid API access.
 
+Because local embeddings and local generation can produce slightly different wording across runs, answer phrasing and some distance values may vary slightly when the project is rerun. The qualitative retrieval pattern and the documented failure case should remain the same.
+
 ---
 
 ## Domain
@@ -85,6 +87,12 @@ These are actual top retrieval results from `python retrieval.py` / the retrieva
 | Which professors are described as approachable or accessible? | `professor_natalie_parde.txt` | 0.4829 | 0.5171 | Good top hit, but lower confidence than CS 251 queries |
 | What do students say about Natalie Parde? | `professor_natalie_parde.txt` | 0.4658 | 0.5342 | Correct professor-specific match |
 
+**Retrieval example explanation 1:**  
+For the CS 251 difficulty query, retrieval worked well because the query wording strongly matched the language in `cs251_difficulty_reddit.txt`, which directly mentions that CS 251 is time-consuming and project-intensive. The next two retrieved chunks were still relevant because they discussed workload, study time, and success strategies for the same course.
+
+**Retrieval example explanation 2:**  
+For the professor accessibility query, retrieval was still relevant, but weaker. `professor_natalie_parde.txt` ranked first because it explicitly uses the word "accessible," while `professor_daniel_ayala.txt` ranked third even though it contains "approachable." This shows that the system can retrieve the right professor evidence, but professor comparison questions are more sensitive to wording than the course questions.
+
 ---
 
 ## Grounded Generation
@@ -109,7 +117,7 @@ The Ollama prompt includes these rules:
 The prompt context is built programmatically from the retrieved chunks and includes source filename, chunk index, and chunk text for each retrieved result.
 
 **How source attribution is surfaced in the response:**  
-Source attribution does not depend only on the model. `query.py` extracts the unique source filenames from retrieved chunk metadata and returns them separately in the output dictionary as `sources`. `app.py` then displays those source filenames in the UI under `Retrieved from`.
+Source attribution does not depend only on the model. `query.py` extracts the unique source filenames from retrieved chunk metadata, appends them directly inside the final answer text as a `Sources:` line, and also returns them separately in the output dictionary as `sources`. `app.py` then displays those source filenames again in the UI under `Retrieved from`.
 
 ### Grounded Generation Examples
 
@@ -131,6 +139,44 @@ Answer: `I don't have enough information in the documents to answer that.
 Sources: No relevant sources found.`
 
 This refusal was correct because the retrieved chunks were about CS professors and CS courses, not dining halls. The top retrieved chunk for that question came from `uic_cs_professors_general.txt` with a distance of `0.7183`, which was above the generation threshold.
+
+---
+
+## Query Interface
+
+The project includes a simple Gradio interface in `app.py`. The UI is intentionally minimal so it is easy to demonstrate without extra explanation.
+
+**Input field:**
+- `Your question`
+
+**Output fields:**
+- `Answer`
+- `Retrieved from`
+- `Retrieved chunks`
+
+The `Answer` field shows the grounded answer text, and `query.py` appends a `Sources:` line directly inside that answer. The `Retrieved from` field shows the source filenames separately as a clean list, and `Retrieved chunks` shows the raw retrieved evidence with source filename, chunk index, distance, similarity, and chunk text for debugging and demo purposes.
+
+### Sample Interaction Transcript
+
+**User question:**  
+`Which professors are described as approachable or accessible?`
+
+**Answer field:**  
+`Professor Natalie Parde is described as accessible, and Professor Daniel Ayala is described as approachable.
+
+Sources: professor_natalie_parde.txt, professor_adam_koehler.txt, professor_daniel_ayala.txt`
+
+**Retrieved from field:**  
+- `professor_natalie_parde.txt`
+- `professor_adam_koehler.txt`
+- `professor_daniel_ayala.txt`
+
+**Retrieved chunks field (excerpt):**  
+`Result 1`  
+`Source: professor_natalie_parde.txt`  
+`Chunk index: 0`  
+`Distance: 0.4829`  
+`Similarity: 0.5171`
 
 ---
 
