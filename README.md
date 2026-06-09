@@ -2,6 +2,10 @@
 
 This project is a small retrieval-augmented question answering system for student-generated knowledge about UIC Computer Science courses and professors. It loads short review-style documents, chunks them, embeds them with `sentence-transformers/all-MiniLM-L6-v2`, stores them in ChromaDB, retrieves relevant chunks, and uses Ollama with `llama3.1:8b` to generate grounded answers.
 
+## Reproducibility Note
+
+This project uses local embeddings with `sentence-transformers/all-MiniLM-L6-v2` and local LLM generation with Ollama `llama3.1:8b`. To reproduce the full generation pipeline, install Ollama and run `ollama pull llama3.1:8b` before running `python query.py` or `python app.py`. Retrieval can still be tested without Groq or paid API access.
+
 ---
 
 ## Domain

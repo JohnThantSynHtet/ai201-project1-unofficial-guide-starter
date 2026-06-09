@@ -10,7 +10,10 @@ OLLAMA_MODEL = "llama3.1:8b"
 REFUSAL_MESSAGE = "I don't have enough information in the documents to answer that."
 TEST_QUESTIONS = [
     "How difficult is CS 251 according to students?",
+    "What advice do students give for succeeding in CS 251?",
+    "What do students say about CS 342 workload?",
     "Which professors are described as approachable or accessible?",
+    "Which professors are praised for organization and clear instruction?",
     "What is the best dining hall at UIC?",
 ]
 
@@ -132,7 +135,7 @@ def ask(question: str) -> dict:
     if best_distance > 0.5:
         return {
             "answer": append_sources_to_answer(REFUSAL_MESSAGE, []),
-            "sources": sources,
+            "sources": [],
             "retrieved_chunks": retrieved_chunks,
         }
 
