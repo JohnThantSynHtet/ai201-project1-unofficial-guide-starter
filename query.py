@@ -101,6 +101,18 @@ def unique_sources(retrieved_chunks):
     return sources
 
 
+def append_sources_to_answer(answer_text, sources):
+    """
+    Append programmatic source attribution directly to the answer text.
+    """
+    cleaned_answer = answer_text.strip()
+
+    if not sources:
+        return f"{REFUSAL_MESSAGE}\n\nSources: No relevant sources found."
+
+    return f"{cleaned_answer}\n\nSources: {', '.join(sources)}"
+
+
 def ask(question: str) -> dict:
     """
     Retrieve relevant chunks and ask Ollama for a grounded answer.
@@ -111,7 +123,7 @@ def ask(question: str) -> dict:
 
     if not retrieved_chunks:
         return {
-            "answer": REFUSAL_MESSAGE,
+            "answer": append_sources_to_answer(REFUSAL_MESSAGE, []),
             "sources": [],
             "retrieved_chunks": [],
         }
@@ -119,7 +131,7 @@ def ask(question: str) -> dict:
     best_distance = retrieved_chunks[0]["distance"]
     if best_distance > 0.5:
         return {
-            "answer": REFUSAL_MESSAGE,
+            "answer": append_sources_to_answer(REFUSAL_MESSAGE, []),
             "sources": sources,
             "retrieved_chunks": retrieved_chunks,
         }
@@ -137,6 +149,7 @@ def ask(question: str) -> dict:
     )
 
     answer_text = response["message"]["content"].strip()
+    answer_text = append_sources_to_answer(answer_text, sources)
 
     return {
         "answer": answer_text,
